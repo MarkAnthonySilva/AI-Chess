@@ -41,4 +41,15 @@ class BoardState:
             else:
                 currentColor = 'white'
 
+    def evaluate(self, color):
+        #return the value of the boardstate in relation to the color passed along
+        value = 0
+        for i in range(8):
+            for j in range(8):
+                if self.board[i][j].hasPiece:
+                    if self.board[i][j].piece.color == color:
+                        value = value + self.board[i][j].piece.value
+                    else:
+                        value = value - self.board[i][j].piece.value
+        return value
 
