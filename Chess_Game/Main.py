@@ -1,12 +1,12 @@
 
 import tkinter as tk
+import numpy as np
 from array import *
 
 from Pieces import *
 from BoardState import *
 
 global currentPlayerColor, currentSelectedTile, currentPossibleMoves
-
 
 
 board = BoardState()
@@ -53,40 +53,66 @@ canvas = tk.Canvas(window, bg="white", width=810, height=810)
 currentColPos = 10
 currentRowPos = 0
 
+matrix = np.zeros((8, 8))
+row_index = -1
 for r in board.board:
+    row_index += 1
+    col_index = -1
     for c in r:
+        col_index += 1
         coord = currentColPos, currentRowPos, currentColPos + 100, currentRowPos, currentColPos + 100, currentRowPos + 100, currentColPos, currentRowPos + 100
         box = canvas.create_polygon(coord, fill = c.color)
+        # Stores every polygon created to make the black and white checker board based on coordinates
+        matrix[row_index, col_index] = box
         if(c.piece):
             image = canvas.create_image(currentColPos, currentRowPos, anchor = tk.NW, image = c.piece.image)
         currentRowPos += 100
-    #currentColPos = 10
+    # currentColPos = 10
     currentRowPos = 0
-    currentColPos +=100
+    currentColPos += 100
 
 currentPlayerColor = "white"
 currentSelectedTile = []
 currentPossibleMoves = []
+changed_tiles = []
+matrix_int = matrix.astype(np.int)  # Convert Matrix from float 64 to int so item config can be used
+
 
 def buttonPressed(event):
-
-    global currentPlayerColor, currentSelectedTile, currentPossibleMoves
+    global currentPlayerColor, currentSelectedTile, currentPossibleMoves, changed_tiles
     canvas.focus_set()
     if(event.x < 10 or event.y < 0 or event.y > 800 or event.x > 800):
         return
+
+    # If the color of a tile was changed previously, revert back to original
+    if changed_tiles:
+        for item_tuple in changed_tiles:
+            canvas.itemconfig(item_tuple[0], fill=item_tuple[1], outline="")
+
     tileX = int((event.x - 10) / 100)
     tileY = int(event.y / 100)
+    changed_tiles = []
     print(tileX, ",", tileY)
     if board.board[tileX][tileY].hasPiece():
         #print(board.board[tileX][tileY].piece.x, ",", board.board[tileX][tileY].piece.y)
-        print(board.board[tileX][tileY].piece.getAvailableMoves(board))
+        available_moves = board.board[tileX][tileY].piece.getAvailableMoves(board)
+        print(available_moves)
+
+        # Turn every available move for the piece to blue with red outline
+        if available_moves:
+            for possible_moves_tiles in available_moves:
+                x_cord = possible_moves_tiles[0]
+                y_cord = possible_moves_tiles[1]
+
+                item = matrix_int[x_cord, y_cord]
+                original_color = canvas.itemcget(item, "fill")
+                # Store the tile and the color of the coordinate so it
+                # can be reverted back later
+                changed_tiles.append((item, original_color))
+                canvas.itemconfig(item, fill = "blue", width = "10", outline = "red")
 
 
 canvas.bind("<Button-1>", buttonPressed)
 canvas.pack()
-
-
-
-
 
 window.mainloop()
