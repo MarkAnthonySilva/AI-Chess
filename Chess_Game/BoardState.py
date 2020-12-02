@@ -29,19 +29,29 @@ class BoardState:
         self.whitePieces = []
 
     def pieceAt(self, x, y):
-        for i in blackPieces:
+        for i in self.blackPieces:
             if i.x == x and i.y == y:
                 return 'black'
-        for i in whitePieces:
+        for i in self.whitePieces:
             if i.x == x and i.y == y:
                 return 'white'
         return 'none'
+
+    def getPieceAt(self, x, y):
+        for i in self.blackPieces:
+            if i.x == x and i.y == y:
+                return i
+        for i in self.whitePieces:
+            if i.x == x and i.y == y:
+                return i
+        return None
 
     def addPiece(self, piece):
         if piece.color == 'white':
             self.whitePieces.append(piece)
         else:
             self.blackPieces.append(piece)
+
 
     def evaluate(self, color):
         evaluation = 0;
