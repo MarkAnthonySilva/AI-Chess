@@ -9,35 +9,35 @@ class Piece:
         self.y = Y
         self.color = Color
         self.value = 0
-        self.moved = False
         self.image = Image
+        self.canvas_image = 0;
 
     def getAvailableMoves(self):
         pass
-
 class Pawn(Piece):
     value = 1
+    moved = False
     def getAvailableMoves(self, board):
         toReturn = []
-        if self.color == 'white':
+        if self.color == "white":
             if not self.moved:
-                if board.pieceAt(self.x, self.y-2) == 'none':
+                if not board.board[self.x][self.y-2].hasPiece():
                     toReturn.append([self.x, self.y-2])
-            if inBounds(self.x, self.y-1) and board.pieceAt(self.x, self.y-1) == 'none':
+            if inBounds(self.x, self.y-1) and not board.board[self.x][self.y-1].hasPiece():
                     toReturn.append([self.x, self.y-1])
-            if inBounds(self.x+1, self.y-1) and board.pieceAt(self.x+1, self.y-1) == 'black':
+            if inBounds(self.x+1, self.y-1) and board.board[self.x+1][self.y-1].hasEnemyPiece(self.color):
                    toReturn.append([self.x+1, self.y-1])
-            if inBounds(self.x-1, self.y-1) and board.pieceAt(self.x-1, self.y-1) == 'black':
+            if inBounds(self.x-1, self.y-1) and board.board[self.x-1][self.y-1].hasEnemyPiece(self.color):
                    toReturn.append([self.x-1, self.y-1])
         else:
             if not self.moved:
-                if board.pieceAt(self.x, self.y+2) == 'none':
+                if not board.board[self.x][self.y+2].hasPiece():
                     toReturn.append([self.x, self.y+2])
-            if inBounds(self.x, self.y+1) and board.pieceAt(self.x, self.y+1) == 'none':
+            if inBounds(self.x, self.y+1) and not board.board[self.x][self.y+1].hasPiece():
                     toReturn.append([self.x, self.y+1])
-            if inBounds(self.x+1, self.y+1) and board.pieceAt(self.x+1, self.y+1) == 'black':
+            if inBounds(self.x+1, self.y+1) and board.board[self.x+1][self.y+1].hasEnemyPiece(self.color):
                    toReturn.append([self.x+1, self.y+1])
-            if inBounds(self.x-1, self.y+1) and board.pieceAt(self.x-1, self.y+1) == 'black':
+            if inBounds(self.x-1, self.y+1) and board.board[self.x-1][self.y+1].hasEnemyPiece(self.color):
                    toReturn.append([self.x-1, self.y+1])
         return toReturn
 
@@ -50,9 +50,8 @@ class Rook(Piece):
         X = self.x
         Y = self.y+1
         while(Y < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -61,9 +60,8 @@ class Rook(Piece):
         X = self.x
         Y = self.y-1
         while(Y >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -72,9 +70,8 @@ class Rook(Piece):
         X = self.x+1
         Y = self.y
         while(X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -83,9 +80,8 @@ class Rook(Piece):
         X = self.x-1
         Y = self.y
         while(X >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -97,23 +93,71 @@ class Knight(Piece):
     value = 5
     def getAvailableMoves(self, board):
         toReturn = []
-        possibleMoves = [[self.x-1, self.y-2],
-                         [self.x+1, self.y-2],
-                         [self.x-2, self.y-1],
-                         [self.x+2, self.y-1],
-                         [self.x-2, self.y+1],
-                         [self.x+2, self.y+1],
-                         [self.x-1, self.y+2],
-                         [self.x+1, self.y+2]]
 
-        for i in possibleMoves:
-            if inBounds(i[0],i[1]):
-                piece = board.pieceAt(i[0],i[1])
-                if piece != 'none':
-                    if piece != self.color:
-                        toReturn.append([i[0],i[1]])
-                else:
-                    toReturn.append([i[0],i[1]])
+        X = self.x-1
+        Y = self.y-2
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x+1
+        Y = self.y-2
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-2
+        Y = self.y-1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x+2
+        Y = self.y-1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-2
+        Y = self.y+1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x+2
+        Y = self.y+1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-1
+        Y = self.y+2
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-1
+        Y = self.y+2
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
         return toReturn
 
 
@@ -126,9 +170,8 @@ class Bishop(Piece):
         X = self.x+1
         Y = self.y+1
         while(Y < 8 and X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -138,9 +181,8 @@ class Bishop(Piece):
         X = self.x+1
         Y = self.y-1
         while(Y >= 0 and X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -150,9 +192,8 @@ class Bishop(Piece):
         X = self.x-1
         Y = self.y+1
         while(X >= 0 and Y < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -162,9 +203,8 @@ class Bishop(Piece):
         X = self.x-1
         Y = self.y-1
         while(X >= 0 and Y >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -182,9 +222,8 @@ class Queen(Piece):
         X = self.x
         Y = self.y+1
         while(Y < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -193,9 +232,8 @@ class Queen(Piece):
         X = self.x
         Y = self.y-1
         while(Y >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -204,9 +242,8 @@ class Queen(Piece):
         X = self.x+1
         Y = self.y
         while(X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -215,9 +252,8 @@ class Queen(Piece):
         X = self.x-1
         Y = self.y
         while(X >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -226,9 +262,8 @@ class Queen(Piece):
         X = self.x+1
         Y = self.y+1
         while(Y < 8 and X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -238,9 +273,8 @@ class Queen(Piece):
         X = self.x+1
         Y = self.y-1
         while(Y >= 0 and X < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -250,9 +284,8 @@ class Queen(Piece):
         X = self.x-1
         Y = self.y+1
         while(X >= 0 and Y < 8):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
@@ -262,36 +295,81 @@ class Queen(Piece):
         X = self.x-1
         Y = self.y-1
         while(X >= 0 and Y >= 0):
-            piece = board.pieceAt(X,Y)
-            if piece != 'none':
-                if piece != self.color:
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
                     toReturn.append([X,Y])
                 break
             toReturn.append([X,Y])
             X = X-1
             Y = Y-1
-        return toReturn
 
 class King(Piece):
     value = 10000000
     def getAvailableMoves(self, board):
         toReturn = []
-        possibleMoves = [[self.x-1, self.y-1],
-                         [self.x-1, self.y],
-                         [self.x-1, self.y+1],
-                         [self.x, self.y-1],
-                         [self.x, self.y+1],
-                         [self.x+1, self.y-1],
-                         [self.x+1, self.y],
-                         [self.x+1, self.y+1]]
 
-        for i in possibleMoves:
-            if inBounds(i[0],i[1]):
-                piece = board.pieceAt(i[0],i[1])
-                if piece != 'none':
-                    if piece != self.color:
-                        toReturn.append([i[0],i[1]])
-                else:
-                    toReturn.append([i[0],i[1]])
-
+        X = self.x+1
+        Y = self.y+1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x+1
+        Y = self.y
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x+1
+        Y = self.y-1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x
+        Y = self.y+1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x
+        Y = self.y-1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-1
+        Y = self.y-1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-1
+        Y = self.y+1
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
+        X = self.x-1
+        Y = self.y
+        if inBounds(X,Y):
+            if board.board[X][Y].hasPiece():
+                if board.board[X][Y].hasEnemyPiece(self.color):
+                    toReturn.append([X,Y])
+            else:
+                toReturn.append([X,Y])
         return toReturn
