@@ -8,7 +8,7 @@ from BoardState import *
 
 
 
-global currentPlayerColor, currentSelectedTile, currentPossibleMoves
+global currentPlayerColor, currentSelectedPiece, currentPossibleMoves
 
 MAX_DEPTH = 3
 
@@ -89,15 +89,20 @@ for r in range(8):
         #if(c.piece):
         #    image = canvas.create_image(currentColPos, currentRowPos, anchor = tk.NW, image = c.piece.image)
 
+for i in board.blackPieces:
+    images.append(canvas.create_image(i.x * 100, i.y * 100, anchor = tk.NW, image = i.image))
+for i in board.whitePieces:
+    images.append(canvas.create_image(i.x * 100, i.y * 100, anchor = tk.NW, image = i.image))
+
 currentPlayerColor = 'white'
-currentSelectedTile = []
+currentSelectedPiece = []
 currentPossibleMoves = []
 changed_tiles = []
 matrix_int = matrix.astype(np.int)  # Convert Matrix from float 64 to int so item config can be used
 
 
 def buttonPressed(event):
-    global currentPlayerColor, currentSelectedTile, currentPossibleMoves, changed_tiles
+    global currentPlayerColor, currentSelectedPiece, currentPossibleMoves, changed_tiles
     canvas.focus_set()
 
     #check if click was inside the board area
@@ -123,8 +128,8 @@ def buttonPressed(event):
         # Turn every available move for the piece to blue with red outline
         if available_moves:
             for possible_moves_tiles in available_moves:
-                x_cord = possible_moves_tiles[0]
-                y_cord = possible_moves_tiles[1]
+                x_cord = possible_moves_tiles[1]
+                y_cord = possible_moves_tiles[0]
 
                 item = matrix_int[x_cord, y_cord]
                 original_color = canvas.itemcget(item, 'fill')
