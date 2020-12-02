@@ -11,10 +11,10 @@ class Piece:
         self.value = 0
         self.moved = False
         self.image = Image
+        self.canvas_image = 0;
 
     def getAvailableMoves(self):
         pass
-
 class Pawn(Piece):
     value = 1
     def getAvailableMoves(self, board):
