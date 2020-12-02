@@ -128,6 +128,12 @@ def buttonPressed(event):
         currentPossibleMoves = available_moves
         print(available_moves)
 
+        # Highlight current Tile Selected
+        tile_selected = matrix_int[tileX][tileY]
+        color = canvas.itemcget(tile_selected, "fill")
+        changed_tiles.append((tile_selected, color))
+        canvas.itemconfig(tile_selected, width="10", outline="orange")
+
         # Turn every available move for the piece to blue with red outline
         if available_moves:
             for possible_moves_tiles in available_moves:
