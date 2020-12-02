@@ -23,7 +23,7 @@ def getTileColor(x,y):
         if(y % 2 == 0):
             return 'black'
         else:
-            return 'white'    
+            return 'white'
 
 
 #create the board and window
@@ -64,6 +64,13 @@ canvas = tk.Canvas(window, bg='white', width=800, height=800)
 
 #holds all the polygons so they can be redrawn later
 matrix = np.zeros((8, 8))
+#holds all the images so they can be redrawn later
+images = []
+
+for i in board.blackPieces:
+    images.append(canvas.create_image(i.x * 100, i.y * 100, anchor = tk.NW, image = i.image))
+for i in board.whitePieces:
+    images.append(canvas.create_image(i.x * 100, i.y * 100, anchor = tk.NW, image = i.image))
 
 row_index = -1
 for r in range(8):
@@ -108,9 +115,9 @@ def buttonPressed(event):
 
     changed_tiles = []
     print(tileX, ',', tileY)
-    if board.board[tileX][tileY].hasPiece():
+    if board.pieceAt(tileX, tileY) != 'none':
         #print(board.board[tileX][tileY].piece.x, ',', board.board[tileX][tileY].piece.y)
-        available_moves = board.board[tileX][tileY].piece.getAvailableMoves(board)
+        available_moves = board.getPieceAt(tileX, tileY).getAvailableMoves(board)
         print(available_moves)
 
         # Turn every available move for the piece to blue with red outline
@@ -124,7 +131,7 @@ def buttonPressed(event):
                 # Store the tile and the color of the coordinate so it
                 # can be reverted back later
                 changed_tiles.append((item, original_color))
-                canvas.itemconfig(item, fill = 'blue', width = '10', outline = 'red')
+                canvas.itemconfig(item, fill = 'blue', width = '2', outline = 'red')
 
 
 canvas.bind('<Button-1>', buttonPressed)
