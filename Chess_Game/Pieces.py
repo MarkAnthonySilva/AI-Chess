@@ -108,7 +108,7 @@ class Knight(Piece):
 
         for i in possibleMoves:
             if inBounds(i[0],i[1]):
-                piece = board.pieceAt(i[0].i[1])
+                piece = board.pieceAt(i[0],i[1])
                 if piece != 'none':
                     if piece != self.color:
                         toReturn.append([i[0],i[1]])
@@ -287,7 +287,7 @@ class King(Piece):
 
         for i in possibleMoves:
             if inBounds(i[0],i[1]):
-                piece = board.pieceAt(i[0].i[1])
+                piece = board.pieceAt(i[0],i[1])
                 if piece != 'none':
                     if piece != self.color:
                         toReturn.append([i[0],i[1]])
