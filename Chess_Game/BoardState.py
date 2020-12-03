@@ -1,27 +1,6 @@
+import copy
 
-
-
-#class Tile:
-#    def __init__(self, X, Y, Color):
-#        self.x = X
-#        self.y = Y
-#        self.color = Color
-#        self.piece = None
-
-#    def setCurrentPiece(self, Piece):
-#        self.piece = Piece
-
-#    def hasPiece(self):
-#        return self.piece is not None
-
-#    def hasEnemyPiece(self, color):
-#        if(self.piece is not None):
-#            if(self.piece.color == color):
-#                return False
-#            else:
-#                return True
-#        else:
-#            return False
+MAX_DEPTH = 2
 
 class BoardState:
     def __init__(self):
@@ -65,43 +44,67 @@ class BoardState:
                 evaluation == evaluation - i.value
             for i in self.whitePieces:
                 evaluation == evaluation + i.value
+        return evaluation
+
+    def createTree(self, color):
+        root = StateTree(self)
+        treeRecursion(color, 0, root)
+        return root
+        
+                    
 
 class StateTree:
-    def __init__(self, state, parent = None, children = None):
+    def __init__(self, state, parent = None):
         self.state = state
         self.parent = parent
-        if children is not None:
-            self.children = children
-        else:
-            self.children = []
+        self.children = []
+        self.eval = 0
 
-
-
-#class BoardState:
-#    def __init__(self):
-#        self.board = [[],[],[],[],[],[],[],[]]
-#        currentColor = 'white'
-#        for i in range(8):
-#            for j in range(8):
-#                self.board[i].append(Tile(i,j, currentColor))
-#                if(currentColor == 'white'):
-#                    currentColor = 'black'
-#                else:
-#                    currentColor = 'white'
-#            if(currentColor == 'white'):
-#                currentColor = 'black'
-#            else:
-#                currentColor = 'white'
-
-#    def evaluate(self, color):
-#        #return the value of the boardstate in relation to the color passed along
-#        value = 0
-#        for i in range(8):
-#            for j in range(8):
-#                if self.board[i][j].hasPiece:
-#                    if self.board[i][j].piece.color == color:
-#                        value = value + self.board[i][j].piece.value
-#                    else:
-#                        value = value - self.board[i][j].piece.value
-#        return value
+def treeRecursion(color, depth, state):
+    board = state.state
+    if color == 'white':
+        #iterate through all the pieces
+        for i in board.whitePieces:
+            #for each piece, get all the available moves
+            possibleMoves = i.getAvailableMoves(board)
+            #for every possible move, create a copy of the state, make the move, then append it to the parent state
+            for j in possibleMoves:
+                cp = copy.deepcopy(board)
+                piece = cp.getPieceAt(i.x, i.y)
+                #if there is already a piece there, remove it
+                if cp.pieceAt(j[0],j[1]) == 'black':
+                    for k in range(len(cp.blackPieces)):
+                        if cp.blackPieces[k].x == j[0] and cp.blackPieces[k].y == j[1]:
+                            cp.blackPieces.pop(k)
+                            break
+                piece.x = j[0]
+                piece.y = j[1]
+                piece.moved = True
+                state.children.append(StateTree(cp,state))
+    else:
+        #iterate through all the pieces
+        for i in board.blackPieces:
+            #for each piece, get all the available moves
+            possibleMoves = i.getAvailableMoves(board)
+            #for every possible move, create a copy of the state, make the move, then append it to the parent state
+            for j in possibleMoves:
+                cp = copy.deepcopy(board)
+                piece = cp.getPieceAt(i.x, i.y)
+                #if there is already a piece there, remove it
+                if cp.pieceAt(j[0],j[1]) == 'white':
+                    #cp.whitePieces.remove(board.pieceAt(j[0],j[1]))
+                    for k in range(len(cp.blackPieces)):
+                        if cp.whitePieces[k].x == j[0] and cp.whitePieces[k].y == j[1]:
+                            cp.whitePieces.pop(k)
+                            break
+                piece.x = j[0]
+                piece.y = j[1]
+                piece.moved = True
+                state.children.append(StateTree(cp,state))
+    if depth < MAX_DEPTH:
+        for i in state.children:
+            if color == 'black':
+                treeRecursion('white', depth + 1, i)
+            else:
+                treeRecursion('black', depth + 1, i)
 
