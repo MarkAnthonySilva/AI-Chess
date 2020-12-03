@@ -98,6 +98,9 @@ board.addPiece(Queen(3,7,'white', QUEEN_WHITE))
 board.addPiece(King(4,0,'black', KING_BLACK))
 board.addPiece(King(4,7,'white', KING_WHITE))
 
+print("Board Evaluation (White):", board.evaluate("white"))
+print("Board Evaluation (Black):", board.evaluate("black"))
+print()
 #tree = board.createTree('white')
 #newBoard = abMinMax('white', tree, 'max')
 
