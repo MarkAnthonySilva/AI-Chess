@@ -3,6 +3,19 @@ from BoardState import *
 def inBounds(x,y):
     return x >= 0 and x < 8 and y >= 0 and y < 8
 
+PAWN_BLACK = 0
+ROOK_BLACK = 1
+KNIGHT_BLACK = 2
+BISHOP_BLACK = 3
+QUEEN_BLACK = 4
+KING_BLACK = 5
+PAWN_WHITE = 6
+ROOK_WHITE = 7
+KNIGHT_WHITE = 8
+BISHOP_WHITE = 9
+QUEEN_WHITE = 10
+KING_WHITE = 11
+
 class Piece:
     def __init__(self, X, Y, Color, Image):
         self.x = X
@@ -11,10 +24,11 @@ class Piece:
         self.value = 0
         self.moved = False
         self.image = Image
-        self.canvas_image = 0;
+        self.canvas_image = 0
 
     def getAvailableMoves(self):
         pass
+
 class Pawn(Piece):
     value = 1
     def getAvailableMoves(self, board):
@@ -30,15 +44,15 @@ class Pawn(Piece):
             if inBounds(self.x-1, self.y-1) and board.pieceAt(self.x-1, self.y-1) == 'black':
                 toReturn.append([self.x-1, self.y-1])
         else:
-
+            
             if inBounds(self.x, self.y+1) and board.pieceAt(self.x, self.y+1) == 'none':
                 toReturn.append([self.x, self.y+1])
                 if not self.moved:
                     if board.pieceAt(self.x, self.y+2) == 'none':
                         toReturn.append([self.x, self.y+2])
-            if inBounds(self.x+1, self.y+1) and board.pieceAt(self.x+1, self.y+1) == 'black':
+            if inBounds(self.x+1, self.y+1) and board.pieceAt(self.x+1, self.y+1) == 'white':
                 toReturn.append([self.x+1, self.y+1])
-            if inBounds(self.x-1, self.y+1) and board.pieceAt(self.x-1, self.y+1) == 'black':
+            if inBounds(self.x-1, self.y+1) and board.pieceAt(self.x-1, self.y+1) == 'white':
                 toReturn.append([self.x-1, self.y+1])
         return toReturn
 
