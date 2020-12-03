@@ -21,7 +21,6 @@ class Piece:
         self.x = X
         self.y = Y
         self.color = Color
-        self.value = 0
         self.moved = False
         self.image = Image
         self.canvas_image = 0
