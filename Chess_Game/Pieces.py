@@ -31,6 +31,12 @@ class Piece:
 
 class Pawn(Piece):
     value = 1
+
+    def __str__(self):
+        return '[PAWN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
         if self.color == 'white':
@@ -58,6 +64,12 @@ class Pawn(Piece):
 
 class Rook(Piece):
     value = 5
+
+    def __str__(self):
+        return '[ROOK,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[ROOK,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
 
@@ -110,6 +122,12 @@ class Rook(Piece):
 
 class Knight(Piece):
     value = 5
+
+    def __str__(self):
+        return '[KNIGHT,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[KNIGHT,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
         possibleMoves = [[self.x-1, self.y-2],
@@ -134,6 +152,12 @@ class Knight(Piece):
 
 class Bishop(Piece):
     value = 5
+
+    def __str__(self):
+        return '[BISHOP,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[BISHOP,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
 
@@ -190,6 +214,12 @@ class Bishop(Piece):
 
 class Queen(Piece):
     value = 5
+
+    def __str__(self):
+        return '[QUEEN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[QUEEN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
 
@@ -289,6 +319,12 @@ class Queen(Piece):
 
 class King(Piece):
     value = 10000000
+
+    def __str__(self):
+        return '[KING,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[KING,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
         possibleMoves = [[self.x-1, self.y-1],
