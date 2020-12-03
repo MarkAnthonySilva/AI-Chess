@@ -2,10 +2,49 @@ import copy
 
 MAX_DEPTH = 2
 
+def abMinMax(color, tree, minmax):
+    if(len(tree.children) == 0):
+        tree.eval = tree.state.evaluate(color)
+        return tree
+    else:
+        evaluation = None
+        for i in tree.children:
+            if minmax == 'min':
+                value = abMinMax(color, i, 'max')
+                if evaluation is None or value.eval < evaluation.eval:
+                    evaluation = value
+            else:
+                value = abMinMax(color, i, 'min')
+                if evaluation is None or value.eval > evaluation.eval:
+                    evaluation = value
+        tree.eval = evaluation.eval
+        if tree.parent == None:
+            return evaluation
+        else:
+            return tree
+
 class BoardState:
     def __init__(self):
         self.blackPieces = []
         self.whitePieces = []
+
+    def __str__(self):
+        str_return = '[[' + str(self.blackPieces[0])
+        for i in range(1,len(self.blackPieces)):
+            str_return = str_return + ',' + str(self.blackPieces[i])
+        str_return = str_return + ']\n[' + str(self.whitePieces[0])
+        for i in range(1,len(self.whitePieces)):
+            str_return = str_return + ',' + str(self.whitePieces[i])
+        return str_return + ']'
+
+    def __repr__(self):
+        str_return = '[[' + str(self.blackPieces[0])
+        for i in range(1,len(self.blackPieces)):
+            str_return = str_return + ',' + str(self.blackPieces[i])
+        str_return = str_return + ']\n[' + str(self.whitePieces[0])
+        for i in range(1,len(self.whitePieces)):
+            str_return = str_return + ',' + str(self.whitePieces[i])
+        return str_return + ']'
 
     def pieceAt(self, x, y):
         for i in self.blackPieces:
