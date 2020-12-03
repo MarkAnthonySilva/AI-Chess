@@ -28,29 +28,7 @@ def getTileColor(x,y):
         else:
             return 'white'
 
-#color - color of the player to evaluate in relation to (color of whatever player the AI is)
-#tree - the state tree to evaluate (pass the root node of the current board)
-#minmax - whether the current node is a min or a max (should be max)
-def abMinMax(color, tree, minmax):
-    if(len(tree.children) == 0):
-        tree.eval = tree.state.evaluate(color)
-        return tree
-    else:
-        evaluation = None
-        for i in tree.children:
-            if minmax == 'min':
-                value = abMinMax(color, i, 'max')
-                if evaluation is None or value.eval < evaluation.eval:
-                    evaluation = value
-            else:
-                value = abMinMax(color, i, 'min')
-                if evaluation is None or value.eval > evaluation.eval:
-                    evaluation = value
-        tree.eval = evaluation.eval
-        if tree.parent == None:
-            return evaluation
-        else:
-            return tree
+
 
 
 #create the board and window
@@ -97,6 +75,8 @@ board.addPiece(Queen(3,7,'white', QUEEN_WHITE))
 #Create the Kings
 board.addPiece(King(4,0,'black', KING_BLACK))
 board.addPiece(King(4,7,'white', KING_WHITE))
+
+print(board)
 
 #tree = board.createTree('white')
 #newBoard = abMinMax('white', tree, 'max')
