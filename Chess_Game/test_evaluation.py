@@ -2,6 +2,9 @@ from Pieces import *
 from BoardState import *
 from Main import *
 
+singlePawnBoard = BoardState()
+
+singlePawnBoard.addPiece(Pawn(3, 3, 'white', PAWN_WHITE))
 
 rookTakesQueen = BoardState()
 
@@ -25,27 +28,32 @@ doYourJob.addPiece(Knight(3,6,'white', KNIGHT_WHITE))
 doYourJob.addPiece(Rook(5,5,'black', ROOK_BLACK))
 doYourJob.addPiece(King(3,7,'white', KING_WHITE))
 
-you_might_outnumbered = BoardState()
+you_might_be_outnumbered = BoardState()
 
-you_might_outnumbered.addPiece()
+# you_might_be_outnumbered.addPiece()
+
+print("Single Pawn Board", singlePawnBoard)
+print("White Score:", singlePawnBoard.evaluate('white'))
+print(singlePawnBoard)
+print()
 
 print("Rook Takes Queen", rookTakesQueen)
-print(rookTakesQueen.evaluate('black'))
-print(rookTakesQueen.evaluate('white'))
+print("Black Score:", rookTakesQueen.evaluate('black'))
+print("White Score:", rookTakesQueen.evaluate('white'))
 
 print(abMinMax('white', rookTakesQueen.createTree('white'), 'max').state)
 print('\n')
 
 print("Its Bait Mate", itsBaitMate)
-print(itsBaitMate.evaluate('black'))
-print(itsBaitMate.evaluate('white'))
+print("Black Score:",itsBaitMate.evaluate('black'))
+print("White Score:", itsBaitMate.evaluate('white'))
 
 print(abMinMax('black', itsBaitMate.createTree('black'), 'max').state)
 print('\n')
 
 print("Do Your Job", doYourJob)
-print(doYourJob.evaluate('black'))
-print(doYourJob.evaluate('white'))
+print("Black Score:",doYourJob.evaluate('black'))
+print("White Score:", doYourJob.evaluate('white'))
 
 print(abMinMax('white', doYourJob.createTree('white'), 'max').state)
 print('\n')

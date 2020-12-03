@@ -34,11 +34,12 @@ class Piece:
 
 class Pawn(Piece):
     value = 100
-
-    value = 1
+    black_abb = 'P'
+    white_abb = 'p'
 
     def __str__(self):
         return '[PAWN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def __repr__(self):
         return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
 
@@ -83,6 +84,8 @@ class Pawn(Piece):
 
 class Rook(Piece):
     value = 550
+    black_abb = 'R'
+    white_abb = 'r'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -150,6 +153,8 @@ class Rook(Piece):
 
 class Knight(Piece):
     value = 300
+    black_abb = 'K'
+    white_abb = 'k'
 
     def __str__(self):
         return '[KNIGHT,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
@@ -192,6 +197,8 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
+    black_abb = 'B'
+    white_abb = 'b'
     value = 350
     def __str__(self):
         return '[BISHOP,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
@@ -255,6 +262,9 @@ class Bishop(Piece):
 
 class Queen(Piece):
     value = 1000
+    black_abb = 'Q'
+    white_abb = 'q'
+
     def __str__(self):
         return '[QUEEN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
     def __repr__(self):
@@ -360,6 +370,8 @@ class Queen(Piece):
 
 class King(Piece):
     value = 10000000
+    black_abb = 'K'
+    white_abb = 'k'
 
     def __str__(self):
         return '[KING,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'

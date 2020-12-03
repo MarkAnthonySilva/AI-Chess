@@ -7,6 +7,29 @@ class BoardState:
         self.blackPieces = []
         self.whitePieces = []
 
+    def __str__(self):
+        final_string = ''
+        # board[row][column
+        board = [
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8,
+            ['-'] * 8]
+        for piece in self.blackPieces:
+            board[piece.y][piece.x] = piece.black_abb
+        for piece in self.whitePieces:
+            board[piece.y][piece.x] = piece.white_abb
+
+        for row in board:
+            final_string = final_string + "\n"
+            for col in row:
+                final_string = final_string + " " + col + " "
+
+        return final_string
     def pieceAt(self, x, y):
         for i in self.blackPieces:
             if i.x == x and i.y == y:
