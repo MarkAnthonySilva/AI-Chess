@@ -20,25 +20,26 @@ class Pawn(Piece):
     def getAvailableMoves(self, board):
         toReturn = []
         if self.color == 'white':
-            if not self.moved:
-                if board.pieceAt(self.x, self.y-2) == 'none':
-                    toReturn.append([self.x, self.y-2])
             if inBounds(self.x, self.y-1) and board.pieceAt(self.x, self.y-1) == 'none':
-                    toReturn.append([self.x, self.y-1])
+                toReturn.append([self.x, self.y-1])
+                if not self.moved:
+                    if board.pieceAt(self.x, self.y-2) == 'none':
+                        toReturn.append([self.x, self.y-2])
             if inBounds(self.x+1, self.y-1) and board.pieceAt(self.x+1, self.y-1) == 'black':
-                   toReturn.append([self.x+1, self.y-1])
+                toReturn.append([self.x+1, self.y-1])
             if inBounds(self.x-1, self.y-1) and board.pieceAt(self.x-1, self.y-1) == 'black':
-                   toReturn.append([self.x-1, self.y-1])
+                toReturn.append([self.x-1, self.y-1])
         else:
-            if not self.moved:
-                if board.pieceAt(self.x, self.y+2) == 'none':
-                    toReturn.append([self.x, self.y+2])
+
             if inBounds(self.x, self.y+1) and board.pieceAt(self.x, self.y+1) == 'none':
-                    toReturn.append([self.x, self.y+1])
+                toReturn.append([self.x, self.y+1])
+                if not self.moved:
+                    if board.pieceAt(self.x, self.y+2) == 'none':
+                        toReturn.append([self.x, self.y+2])
             if inBounds(self.x+1, self.y+1) and board.pieceAt(self.x+1, self.y+1) == 'black':
-                   toReturn.append([self.x+1, self.y+1])
+                toReturn.append([self.x+1, self.y+1])
             if inBounds(self.x-1, self.y+1) and board.pieceAt(self.x-1, self.y+1) == 'black':
-                   toReturn.append([self.x-1, self.y+1])
+                toReturn.append([self.x-1, self.y+1])
         return toReturn
 
 class Rook(Piece):
