@@ -1,9 +1,7 @@
 from BoardState import *
 
-
-def inBounds(x, y):
+def inBounds(x,y):
     return x >= 0 and x < 8 and y >= 0 and y < 8
-
 
 PAWN_BLACK = 0
 ROOK_BLACK = 1
@@ -17,7 +15,6 @@ KNIGHT_WHITE = 8
 BISHOP_WHITE = 9
 QUEEN_WHITE = 10
 KING_WHITE = 11
-
 
 class Piece:
     def __init__(self, X, Y, Color, Image):
@@ -38,29 +35,36 @@ class Piece:
 class Pawn(Piece):
     value = 100
 
+    value = 1
+
+    def __str__(self):
+        return '[PAWN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
         if self.color == 'white':
-            if inBounds(self.x, self.y - 1) and board.pieceAt(self.x, self.y - 1) == 'none':
-                toReturn.append([self.x, self.y - 1])
+            if inBounds(self.x, self.y-1) and board.pieceAt(self.x, self.y-1) == 'none':
+                toReturn.append([self.x, self.y-1])
                 if not self.moved:
-                    if board.pieceAt(self.x, self.y - 2) == 'none':
-                        toReturn.append([self.x, self.y - 2])
-            if inBounds(self.x + 1, self.y - 1) and board.pieceAt(self.x + 1, self.y - 1) == 'black':
-                toReturn.append([self.x + 1, self.y - 1])
-            if inBounds(self.x - 1, self.y - 1) and board.pieceAt(self.x - 1, self.y - 1) == 'black':
-                toReturn.append([self.x - 1, self.y - 1])
+                    if board.pieceAt(self.x, self.y-2) == 'none':
+                        toReturn.append([self.x, self.y-2])
+            if inBounds(self.x+1, self.y-1) and board.pieceAt(self.x+1, self.y-1) == 'black':
+                toReturn.append([self.x+1, self.y-1])
+            if inBounds(self.x-1, self.y-1) and board.pieceAt(self.x-1, self.y-1) == 'black':
+                toReturn.append([self.x-1, self.y-1])
         else:
-
-            if inBounds(self.x, self.y + 1) and board.pieceAt(self.x, self.y + 1) == 'none':
-                toReturn.append([self.x, self.y + 1])
+            
+            if inBounds(self.x, self.y+1) and board.pieceAt(self.x, self.y+1) == 'none':
+                toReturn.append([self.x, self.y+1])
                 if not self.moved:
-                    if board.pieceAt(self.x, self.y + 2) == 'none':
-                        toReturn.append([self.x, self.y + 2])
-            if inBounds(self.x + 1, self.y + 1) and board.pieceAt(self.x + 1, self.y + 1) == 'white':
-                toReturn.append([self.x + 1, self.y + 1])
-            if inBounds(self.x - 1, self.y + 1) and board.pieceAt(self.x - 1, self.y + 1) == 'white':
-                toReturn.append([self.x - 1, self.y + 1])
+                    if board.pieceAt(self.x, self.y+2) == 'none':
+                        toReturn.append([self.x, self.y+2])
+            if inBounds(self.x+1, self.y+1) and board.pieceAt(self.x+1, self.y+1) == 'white':
+                toReturn.append([self.x+1, self.y+1])
+            if inBounds(self.x-1, self.y+1) and board.pieceAt(self.x-1, self.y+1) == 'white':
+                toReturn.append([self.x-1, self.y+1])
         return toReturn
 
     # Assumes that player is at bottom half (Encourage Forward Movement)
@@ -85,48 +89,48 @@ class Rook(Piece):
 
         # check every tile along y-positive until you either reach the end or find a piece
         X = self.x
-        Y = self.y + 1
-        while (Y < 8):
-            piece = board.pieceAt(X, Y)
+        Y = self.y+1
+        while(Y < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y + 1
-        # check every tile along y-negative until you either reach the end or find a piece
+            toReturn.append([X,Y])
+            Y = Y+1
+        #check every tile along y-negative until you either reach the end or find a piece
         X = self.x
-        Y = self.y - 1
-        while (Y >= 0):
-            piece = board.pieceAt(X, Y)
+        Y = self.y-1
+        while(Y >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y - 1
-        # check every tile along x-positive until you either reach the end or find a piece
-        X = self.x + 1
+            toReturn.append([X,Y])
+            Y = Y-1
+        #check every tile along x-positive until you either reach the end or find a piece
+        X = self.x+1
         Y = self.y
-        while (X < 8):
-            piece = board.pieceAt(X, Y)
+        while(X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X + 1
-        # check every tile along x-negative until you either reach the end or find a piece
-        X = self.x - 1
+            toReturn.append([X,Y])
+            X = X+1
+        #check every tile along x-negative until you either reach the end or find a piece
+        X = self.x-1
         Y = self.y
-        while (X >= 0):
-            piece = board.pieceAt(X, Y)
+        while(X >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
+            toReturn.append([X,Y])
+            X = X-1
 
         return toReturn
 
@@ -147,6 +151,11 @@ class Rook(Piece):
 class Knight(Piece):
     value = 300
 
+    def __str__(self):
+        return '[KNIGHT,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[KNIGHT,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
         possibleMoves = [[self.x - 1, self.y - 2],
@@ -159,13 +168,13 @@ class Knight(Piece):
                          [self.x + 1, self.y + 2]]
 
         for i in possibleMoves:
-            if inBounds(i[0], i[1]):
-                piece = board.pieceAt(i[0], i[1])
+            if inBounds(i[0],i[1]):
+                piece = board.pieceAt(i[0],i[1])
                 if piece != 'none':
                     if piece != self.color:
-                        toReturn.append([i[0], i[1]])
+                        toReturn.append([i[0],i[1]])
                 else:
-                    toReturn.append([i[0], i[1]])
+                    toReturn.append([i[0],i[1]])
         return toReturn
 
     # Assumes that player is at bottom half (Encourage Rook to reach other half of board and stay away from edges)
@@ -184,184 +193,197 @@ class Knight(Piece):
 
 class Bishop(Piece):
     value = 350
+    def __str__(self):
+        return '[BISHOP,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[BISHOP,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
 
     def getAvailableMoves(self, board):
         toReturn = []
 
-        # check every tile along x-positive y-positive until you either reach the end or find a piece
-        X = self.x + 1
-        Y = self.y + 1
-        while (Y < 8 and X < 8):
-            piece = board.pieceAt(X, Y)
+        #check every tile along x-positive y-positive until you either reach the end or find a piece
+        X = self.x+1
+        Y = self.y+1
+        while(Y < 8 and X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y + 1
-            X = X + 1
-        # check every tile along x-positive y-negative until you either reach the end or find a piece
-        X = self.x + 1
-        Y = self.y - 1
-        while (Y >= 0 and X < 8):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            Y = Y+1
+            X = X+1
+        #check every tile along x-positive y-negative until you either reach the end or find a piece
+        X = self.x+1
+        Y = self.y-1
+        while(Y >= 0 and X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y - 1
-            X = X + 1
-        # check every tile along x-negative y-positive until you either reach the end or find a piece
-        X = self.x - 1
-        Y = self.y + 1
-        while (X >= 0 and Y < 8):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            Y = Y-1
+            X = X+1
+        #check every tile along x-negative y-positive until you either reach the end or find a piece
+        X = self.x-1
+        Y = self.y+1
+        while(X >= 0 and Y < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
-            Y = Y + 1
-        # check every tile along x-negative y-negative until you either reach the end or find a piece
-        X = self.x - 1
-        Y = self.y - 1
-        while (X >= 0 and Y >= 0):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            X = X-1
+            Y = Y+1
+        #check every tile along x-negative y-negative until you either reach the end or find a piece
+        X = self.x-1
+        Y = self.y-1
+        while(X >= 0 and Y >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
-            Y = Y - 1
+            toReturn.append([X,Y])
+            X = X-1
+            Y = Y-1
 
         return toReturn
 
 
 class Queen(Piece):
     value = 1000
+    def __str__(self):
+        return '[QUEEN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[QUEEN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
 
     def getAvailableMoves(self, board):
         toReturn = []
 
-        # check every tile along y-positive until you either reach the end or find a piece
+        #check every tile along y-positive until you either reach the end or find a piece
         X = self.x
-        Y = self.y + 1
-        while (Y < 8):
-            piece = board.pieceAt(X, Y)
+        Y = self.y+1
+        while(Y < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y + 1
-        # check every tile along y-negative until you either reach the end or find a piece
+            toReturn.append([X,Y])
+            Y = Y+1
+        #check every tile along y-negative until you either reach the end or find a piece
         X = self.x
-        Y = self.y - 1
-        while (Y >= 0):
-            piece = board.pieceAt(X, Y)
+        Y = self.y-1
+        while(Y >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y - 1
-        # check every tile along x-positive until you either reach the end or find a piece
-        X = self.x + 1
+            toReturn.append([X,Y])
+            Y = Y-1
+        #check every tile along x-positive until you either reach the end or find a piece
+        X = self.x+1
         Y = self.y
-        while (X < 8):
-            piece = board.pieceAt(X, Y)
+        while(X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X + 1
-        # check every tile along x-negative until you either reach the end or find a piece
-        X = self.x - 1
+            toReturn.append([X,Y])
+            X = X+1
+        #check every tile along x-negative until you either reach the end or find a piece
+        X = self.x-1
         Y = self.y
-        while (X >= 0):
-            piece = board.pieceAt(X, Y)
+        while(X >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
-        # check every tile along x-positive y-positive until you either reach the end or find a piece
-        X = self.x + 1
-        Y = self.y + 1
-        while (Y < 8 and X < 8):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            X = X-1
+        #check every tile along x-positive y-positive until you either reach the end or find a piece
+        X = self.x+1
+        Y = self.y+1
+        while(Y < 8 and X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y + 1
-            X = X + 1
-        # check every tile along x-positive y-negative until you either reach the end or find a piece
-        X = self.x + 1
-        Y = self.y - 1
-        while (Y >= 0 and X < 8):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            Y = Y+1
+            X = X+1
+        #check every tile along x-positive y-negative until you either reach the end or find a piece
+        X = self.x+1
+        Y = self.y-1
+        while(Y >= 0 and X < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            Y = Y - 1
-            X = X + 1
-        # check every tile along x-negative y-positive until you either reach the end or find a piece
-        X = self.x - 1
-        Y = self.y + 1
-        while (X >= 0 and Y < 8):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            Y = Y-1
+            X = X+1
+        #check every tile along x-negative y-positive until you either reach the end or find a piece
+        X = self.x-1
+        Y = self.y+1
+        while(X >= 0 and Y < 8):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
-            Y = Y + 1
-        # check every tile along x-negative y-negative until you either reach the end or find a piece
-        X = self.x - 1
-        Y = self.y - 1
-        while (X >= 0 and Y >= 0):
-            piece = board.pieceAt(X, Y)
+            toReturn.append([X,Y])
+            X = X-1
+            Y = Y+1
+        #check every tile along x-negative y-negative until you either reach the end or find a piece
+        X = self.x-1
+        Y = self.y-1
+        while(X >= 0 and Y >= 0):
+            piece = board.pieceAt(X,Y)
             if piece != 'none':
                 if piece != self.color:
-                    toReturn.append([X, Y])
+                    toReturn.append([X,Y])
                 break
-            toReturn.append([X, Y])
-            X = X - 1
-            Y = Y - 1
+            toReturn.append([X,Y])
+            X = X-1
+            Y = Y-1
         return toReturn
 
 
 class King(Piece):
     value = 10000000
 
+    def __str__(self):
+        return '[KING,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+    def __repr__(self):
+        return '[KING,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+
     def getAvailableMoves(self, board):
         toReturn = []
-        possibleMoves = [[self.x - 1, self.y - 1],
-                         [self.x - 1, self.y],
-                         [self.x - 1, self.y + 1],
-                         [self.x, self.y - 1],
-                         [self.x, self.y + 1],
-                         [self.x + 1, self.y - 1],
-                         [self.x + 1, self.y],
-                         [self.x + 1, self.y + 1]]
+        possibleMoves = [[self.x-1, self.y-1],
+                         [self.x-1, self.y],
+                         [self.x-1, self.y+1],
+                         [self.x, self.y-1],
+                         [self.x, self.y+1],
+                         [self.x+1, self.y-1],
+                         [self.x+1, self.y],
+                         [self.x+1, self.y+1]]
 
         for i in possibleMoves:
-            if inBounds(i[0], i[1]):
-                piece = board.pieceAt(i[0], i[1])
+            if inBounds(i[0],i[1]):
+                piece = board.pieceAt(i[0],i[1])
                 if piece != 'none':
                     if piece != self.color:
-                        toReturn.append([i[0], i[1]])
+                        toReturn.append([i[0],i[1]])
                 else:
-                    toReturn.append([i[0], i[1]])
+                    toReturn.append([i[0],i[1]])
 
         return toReturn
