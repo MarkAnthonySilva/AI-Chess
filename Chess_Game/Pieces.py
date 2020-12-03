@@ -153,8 +153,8 @@ class Rook(Piece):
 
 class Knight(Piece):
     value = 300
-    black_abb = 'K'
-    white_abb = 'k'
+    black_abb = 'N'
+    white_abb = 'n'
 
     def __str__(self):
         return '[KNIGHT,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'

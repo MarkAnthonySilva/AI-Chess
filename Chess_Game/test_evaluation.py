@@ -31,29 +31,29 @@ doYourJob.addPiece(King(3,7,'white', KING_WHITE))
 you_might_be_outnumbered = BoardState()
 
 # you_might_be_outnumbered.addPiece()
-
+print("Capital Letter: Black, Lower Case: White")
 print("Single Pawn Board", singlePawnBoard)
 print("White Score:", singlePawnBoard.evaluate('white'))
-print(singlePawnBoard)
 print()
 
-print("Rook Takes Queen", rookTakesQueen)
+print("Rook Takes Queen: Before State", rookTakesQueen)
 print("Black Score:", rookTakesQueen.evaluate('black'))
 print("White Score:", rookTakesQueen.evaluate('white'))
 
-print(abMinMax('white', rookTakesQueen.createTree('white'), 'max').state)
+tree_state = abMinMax('white', rookTakesQueen.createTree('white'), 'max').state
+print("Rook Takes Queen: After State", tree_state)
 print('\n')
 
 print("Its Bait Mate", itsBaitMate)
 print("Black Score:",itsBaitMate.evaluate('black'))
 print("White Score:", itsBaitMate.evaluate('white'))
 
-print(abMinMax('black', itsBaitMate.createTree('black'), 'max').state)
+print("Its Bait Mate: After State", abMinMax('black', itsBaitMate.createTree('black'), 'max').state)
 print('\n')
 
 print("Do Your Job", doYourJob)
 print("Black Score:",doYourJob.evaluate('black'))
 print("White Score:", doYourJob.evaluate('white'))
 
-print(abMinMax('white', doYourJob.createTree('white'), 'max').state)
+print("Do Your Job: After State", abMinMax('white', doYourJob.createTree('white'), 'max').state)
 print('\n')
