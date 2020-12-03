@@ -11,10 +11,6 @@ from BoardState import *
 
 global currentPlayerColor, currentPieceSelected, currentPossibleMoves
 
-
-
-MAX_DEPTH = 2
-
 #returns the color a tile should be based on its position
 def getTileColor(x,y):
     if (x % 2 == 0):
