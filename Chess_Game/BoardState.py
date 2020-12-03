@@ -75,14 +75,14 @@ class BoardState:
         evaluation = 0;
         if color == 'black':
             for i in self.blackPieces:
-                evaluation == evaluation + i.value
+                evaluation = evaluation + i.value
             for i in self.whitePieces:
-                evaluation == evaluation - i.value
+                evaluation = evaluation - i.value
         else:
             for i in self.blackPieces:
-                evaluation == evaluation - i.value
+                evaluation = evaluation - i.value
             for i in self.whitePieces:
-                evaluation == evaluation + i.value
+                evaluation = evaluation + i.value
         return evaluation
 
     def createTree(self, color):
