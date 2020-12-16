@@ -60,19 +60,31 @@ class BoardState:
         white_evaluation = 0
         black_evaluation = 0
 
-        # Material = Value of Pieces, Mobility = Available moves for each piece
+        # Material = Value of Pieces plus position, Mobility = Available moves for each piece
         material_white = 0
         mobility_white = 0
         material_black = 0
         mobility_black = 0
 
         for piece in self.blackPieces:
-            material_black = material_black + piece.value
+            piece_table = piece.getPointTable()
+            x = piece.x
+            y = piece.y
+            row = piece_table[x]
+            value = row[y]
+
+            material_black = material_black + piece.value + -value
             mobility_black = mobility_black + len(piece.getAvailableMoves(self)) * 10
         black_evaluation = material_black + mobility_black
 
         for piece in self.whitePieces:
-            material_white = material_white + piece.value
+            piece_table = piece.getPointTable()
+            x = piece.x
+            y = piece.y
+            row = piece_table[x]
+            value = row[y]
+
+            material_white = material_white + piece.value + value
             mobility_white = mobility_white + len(piece.getAvailableMoves(self)) * 10
         white_evaluation = material_white + mobility_white
 

@@ -83,7 +83,7 @@ class Pawn(Piece):
 
 
 class Rook(Piece):
-    value = 550
+    value = 500
     black_abb = 'R'
     white_abb = 'r'
 
@@ -139,7 +139,7 @@ class Rook(Piece):
 
     # Assumes that player is at bottom half (Encourage Rook to reach other half of board and stay away from edges)
     def getPointTable(self):
-        knight_table = [
+        rook_table = [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [5, 10, 10, 10, 10, 10, 10,  5],
             [-5, 0,  0,  0,  0,  0,  0, -5],
@@ -147,8 +147,8 @@ class Rook(Piece):
             [-5, 0,  0,  0,  0,  0,  0, -5],
             [-5, 0,  0,  0,  0,  0,  0, -5],
             [-5, 0,  0,  0,  0,  0,  0, -5],
-            [0, 0, 0, 5, 5, 0, 0]]
-        return knight_table
+            [0, 0, 0, 5, 5, 0, 0, 0]]
+        return rook_table
 
 
 class Knight(Piece):
@@ -184,7 +184,7 @@ class Knight(Piece):
 
     # Assumes that player is at bottom half (Encourage Rook to reach other half of board and stay away from edges)
     def getPointTable(self):
-        rook_table = [
+        knight_table = [
             [-50,-40,-30,-30,-30,-30,-40,-50],
             [-40,-20,  0,  0,  0,  0,-20,-40],
             [-30,  0, 10, 15, 15, 10,  0,-30],
@@ -193,7 +193,8 @@ class Knight(Piece):
             [-30,  5, 10, 15, 15, 10,  5,-30],
             [-40,-20,  0,  5,  5,  0,-20,-40],
             [-50,-40,-30,-30,-30,-30,-40,-50]]
-        return rook_table
+        return knight_table
+
 
 
 class Bishop(Piece):
@@ -258,6 +259,18 @@ class Bishop(Piece):
             Y = Y-1
 
         return toReturn
+
+    def getPointTable(self):
+        bishop_table = [
+            [-20,-10,-10,-10,-10,-10,-10,-20],
+            [-10,  0,  0,  0,  0,  0,  0,-10],
+            [-10,  0,  5, 10, 10,  5,  0,-10],
+            [-10,  5,  5, 10, 10,  5,  5,-10],
+            [-10,  0, 10, 10, 10, 10,  0,-10],
+            [-10, 10, 10, 10, 10, 10, 10,-10],
+            [-10,  5,  0,  0,  0,  0,  5,-10],
+            [-20,-10,-10,-10,-10,-10,-10,-20]]
+        return bishop_table
 
 
 class Queen(Piece):
@@ -367,6 +380,18 @@ class Queen(Piece):
             Y = Y-1
         return toReturn
 
+    def getPointTable(self):
+        queen_table = [
+            [-20,-10,-10, -5, -5,-10,-10,-20],
+            [-10,  0,  0,  0,  0,  0,  0,-10],
+            [-10,  0,  5,  5,  5,  5,  0,-10],
+            [-5,  0,  5,  5,  5,  5,  0, -5],
+            [0,  0,  5,  5,  5,  5,  0, -5],
+            [-10,  5,  5,  5,  5,  5,  0,-10],
+            [-10,  0,  5,  0,  0,  0,  0,-10],
+            [-20,-10,-10, -5, -5,-10,-10,-20]]
+        return queen_table
+
 
 class King(Piece):
     value = 10000000
@@ -399,3 +424,15 @@ class King(Piece):
                     toReturn.append([i[0],i[1]])
 
         return toReturn
+
+    def getPointTable(self):
+        king_table = [
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-20,-30,-30,-40,-40,-30,-30,-20],
+            [-10,-20,-20,-20,-20,-20,-20,-10],
+            [20, 20,  0,  0,  0,  0, 20, 20],
+            [20, 30, 10,  0,  0, 10, 30, 20]]
+        return king_table
