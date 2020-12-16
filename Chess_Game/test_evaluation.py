@@ -1,6 +1,8 @@
+
 from Pieces import *
 from BoardState import *
 from Main import *
+import time
 
 singlePawnBoard = BoardState()
 
@@ -40,26 +42,34 @@ print("Rook Takes Queen: Before State", rookTakesQueen)
 print("Black Score:", rookTakesQueen.evaluate('black'))
 print("White Score:", rookTakesQueen.evaluate('white'))
 
-tree_state = abMinMax('white', rookTakesQueen.createTree('white'), 'max').state
+start = time.time()
+tree_state = abMax('white', rookTakesQueen, math.inf, 0)
+end = time.time()
 print("Rook Takes Queen: After State", tree_state)
 print("Black Score:", tree_state.evaluate('black'))
 print("White Score:", tree_state.evaluate('white'))
+print("time taken: ", end - start)
 print('\n')
 
 print("Its Bait Mate", itsBaitMate)
 print("Black Score:",itsBaitMate.evaluate('black'))
 print("White Score:", itsBaitMate.evaluate('white'))
-
-print("Its Bait Mate: After State", abMinMax('black', itsBaitMate.createTree('black'), 'max').state)
+start = time.time()
+print("Its Bait Mate: After State", abMax('black', itsBaitMate, math.inf, 0))
+end = time.time()
 print("Black Score:", tree_state.evaluate('black'))
 print("White Score:", tree_state.evaluate('white'))
+print("time taken: ", end - start)
 print('\n')
 
 print("Do Your Job", doYourJob)
 print("Black Score:",doYourJob.evaluate('black'))
 print("White Score:", doYourJob.evaluate('white'))
 
-print("Do Your Job: After State", abMinMax('white', doYourJob.createTree('white'), 'max').state)
+start = time.time()
+print("Do Your Job: After State", abMax('white', doYourJob, math.inf, 0))
+end = time.time()
 print("Black Score:", tree_state.evaluate('black'))
 print("White Score:", tree_state.evaluate('white'))
+print("time taken: ", end - start)
 print('\n')
