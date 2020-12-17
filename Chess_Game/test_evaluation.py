@@ -34,6 +34,7 @@ for i in itsBaitMate.whitePieces:
 doYourJob = BoardState()
 
 doYourJob.addPiece(Queen(3,2,'black', QUEEN_BLACK))
+doYourJob.addPiece(King(0,0,'black', KING_BLACK))
 doYourJob.addPiece(Knight(3,6,'white', KNIGHT_WHITE))
 doYourJob.addPiece(Rook(5,5,'black', ROOK_BLACK))
 doYourJob.addPiece(King(3,7,'white', KING_WHITE))
