@@ -59,6 +59,8 @@ class BoardState:
             return self.blackPieces
 
     def inCheck(self, color):
+        if self.blackKing == None or self.whiteKing == None:
+            return False
         if color == 'white':
             king_location = [self.whiteKing.x, self.whiteKing.y]
             for i in self.blackPieces:
@@ -72,6 +74,8 @@ class BoardState:
         return False
 
     def inCheckMate(self, color):
+        if self.blackKing == None or self.whiteKing == None:
+            return False
         if color == 'white':
             for i in self.whitePieces:
                 for j in i.getAvailableMoves(self):
@@ -129,10 +133,10 @@ class BoardState:
             check_white = 100000000
         if self.inCheck('black'):
             check_black = 100000000
-        if self.inCheckMate('white'):
-            check_white = 100000000
-        if self.inCheckMate('black'):
-            check_black = 100000000
+        #if self.inCheckMate('white'):
+        #    check_white = 100000000
+        #if self.inCheckMate('black'):
+        #    check_black = 100000000
 
         for piece in self.blackPieces:
             material_black = material_black + piece.value
