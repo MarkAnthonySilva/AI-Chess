@@ -9,7 +9,7 @@ from BoardState import *
 
 
 
-global currentPlayerColor, currentPieceSelected, currentPossibleMoves
+global currentPlayerColor, currentPieceSelected, currentPossibleMoves, changed_tiles, matrix_int
 
 
 
@@ -50,8 +50,8 @@ def abMax(color:str, state:BoardState, pruningValue:int, depth:int):
                 #create a new state from that move
                 newState = state.stateAfterMove(i.x, i.y, j[0], j[1])
                 #evaluate that state, using the current best as the pruning value
-                eval = abMin(reverse(color), newState, bestEval, depth + 1)
-                #
+                eval = abMin(color, newState, bestEval, depth + 1)
+                #if the evaluation is greater than the pruning value, stop evaluating this node
                 if eval > pruningValue:
                     return math.inf
                 #if the evaluation is higher than the current highest, save this evaluation
@@ -78,7 +78,7 @@ def abMin(color:str, state:BoardState, pruningValue:int, depth:int):
                 #create a new state from that move
                 newState = state.stateAfterMove(i.x, i.y, j[0], j[1])
                 #evaluate that state, using the current best as the pruning value
-                eval = abMax(reverse(color), newState, bestEval, depth + 1)
+                eval = abMax(color, newState, bestEval, depth + 1)
                 #if the evaluation is less than the pruning value, stop evaluating this node
                 if eval < pruningValue:
                     return -math.inf
@@ -139,12 +139,16 @@ board.addPiece(Queen(3,0,'black', QUEEN_BLACK))
 board.addPiece(Queen(3,7,'white', QUEEN_WHITE))
 #Create the Kings
 board.addPiece(King(4,0,'black', KING_BLACK))
+board.blackKing = board.blackPieces[len(board.blackPieces)-1]
 board.addPiece(King(4,7,'white', KING_WHITE))
+board.whiteKing = board.whitePieces[len(board.whitePieces)-1]
 
 print("Board Evaluation (White):", board.evaluate("white"))
 print("Board Evaluation (Black):", board.evaluate("black"))
 print()
 
+#AI will be white, have it make the first move
+board = abMax('white', board, math.inf, 0)
 
 canvas = tk.Canvas(window, bg='white', width=800, height=800)
 
@@ -175,88 +179,101 @@ for i in board.whitePieces:
     image_id = canvas.create_image(i.x * 100, i.y * 100, anchor=tk.NW, image = imageFiles[i.image])
     i.canvas_image = image_id
 
-currentPlayerColor = 'white'
+currentPlayerColor = 'black'
 currentPieceSelected = []
 currentPossibleMoves = []
 changed_tiles = []
 matrix_int = matrix.astype(np.int)  # Convert Matrix from float 64 to int so item config can be used
 
+print(canvas.find_all())
+
 
 def buttonPressed(event):
-    global currentPlayerColor, currentPieceSelected, currentPossibleMoves, changed_tiles
-    canvas.focus_set()
-    if(event.x < 10 or event.y < 0 or event.y > 800 or event.x > 800):
-        return
+    global currentPlayerColor, currentPieceSelected, currentPossibleMoves, changed_tiles, matrix_int, board, canvas
+    if not board.inCheckMate('white') and not board.inCheckMate('black'):
+        
+        canvas.focus_set()
+        if(event.x < 10 or event.y < 0 or event.y > 800 or event.x > 800):
+            return
 
-    tileX = int(event.x / 100)
-    tileY = int(event.y / 100)
-    print(tileX, ",", tileY)
-    current_piece = board.getPieceAt(tileX, tileY)
-    # If the color of a tile was changed previously, revert back to original
-    if changed_tiles:
-        for item_tuple in changed_tiles:
-            canvas.itemconfig(item_tuple[0], fill=item_tuple[1], outline="")
-        coordX = math.floor(event.x / 100) * 100
-        coordY = math.floor(event.y / 100) * 100
+        tileX = int(event.x / 100)
+        tileY = int(event.y / 100)
+
+        print('[',tileX, ",", tileY,']', board.getPieceAt(tileX, tileY))
+
         current_piece = board.getPieceAt(tileX, tileY)
+        # If the color of a tile was changed previously, revert back to original
+        if changed_tiles:
+            for item_tuple in changed_tiles:
+                canvas.itemconfig(item_tuple[0], fill=item_tuple[1], outline="")
+            coordX = math.floor(event.x / 100) * 100
+            coordY = math.floor(event.y / 100) * 100
+            current_piece = board.getPieceAt(tileX, tileY)
 
-        # If the current possible move is clicked on moved the piece
-        if [tileX, tileY] in currentPossibleMoves:
-            previous_piece = currentPieceSelected
-            # Only on the players turn can they move a piece
-            if previous_piece.color == currentPlayerColor:
-                canvas_image = previous_piece.canvas_image
-                image = imageFiles[previous_piece.image]
+            # If the current possible move is clicked on moved the piece
+            if [tileX, tileY] in currentPossibleMoves:
+                previous_piece = currentPieceSelected
+                # Only on the players turn can they move a piece
+                if previous_piece.color == currentPlayerColor:
+                    #update the board state
+                    board = board.stateAfterMove(previous_piece.x, previous_piece.y, tileX, tileY)
+                    #get the list of all canvas objects and a list of all canvas images
+                    canvas_objects = canvas.find_all()
+                    board_objects = []
+                    for i in board.blackPieces:
+                        board_objects.append(i.canvas_image)
+                        canvas.coords(i.canvas_image, i.x * 100, i.y * 100)
+                    for i in board.whitePieces:
+                        board_objects.append(i.canvas_image)
+                        canvas.coords(i.canvas_image, i.x * 100, i.y * 100)
 
-                if board.getPieceAt(tileX, tileY):
-                    piece_to_delete = board.getPieceAt(tileX, tileY)
-                    canvas.delete(piece_to_delete.canvas_image)
-                    piece_to_delete.x = None
-                    piece_to_delete.y = None
+                    for i in canvas_objects:
+                        if i not in board_objects and i > 64:
+                            canvas.delete(i)
 
-                canvas.delete(canvas_image)
-                previous_piece.canvas_image = canvas.create_image(coordX, coordY, anchor= tk.NW, image=image)
+                    # Switch colors
+                    board = abMax('white', board, math.inf, 0)
+                    canvas_objects = canvas.find_all()
+                    board_objects = []
+                    for i in board.blackPieces:
+                        board_objects.append(i.canvas_image)
+                        canvas.coords(i.canvas_image, i.x * 100, i.y * 100)
+                    for i in board.whitePieces:
+                        board_objects.append(i.canvas_image)
+                        canvas.coords(i.canvas_image, i.x * 100, i.y * 100)
 
-                #Update board State
-                previous_piece.x = tileX
-                previous_piece.y = tileY
-                previous_piece.moved = True
+                    for i in canvas_objects:
+                        if i not in board_objects and i > 64:
+                            canvas.delete(i)
 
-                # Switch colors
-                if(currentPlayerColor == "white"):
-                    currentPlayerColor = "black"
-                elif(currentPlayerColor == "black"):
-                    currentPlayerColor = "white"
+            # Clear changed tiles after
+            changed_tiles = []
+        # If there is no current selected piece
+        elif board.pieceAt(tileX, tileY) != 'none':
+            available_moves = current_piece.getAvailableMoves(board)
+            currentPossibleMoves = available_moves
+            print(available_moves)
 
+            # Highlight current Tile Selected
+            tile_selected = matrix_int[tileX][tileY]
+            color = canvas.itemcget(tile_selected, "fill")
+            changed_tiles.append((tile_selected, color))
+            canvas.itemconfig(tile_selected, width="5", outline="orange")
 
-        # Clear changed tiles after
-        changed_tiles = []
-    # If there is no current selected piece
-    elif board.pieceAt(tileX, tileY) != 'none':
-        available_moves = current_piece.getAvailableMoves(board)
-        currentPossibleMoves = available_moves
-        print(available_moves)
+            # Turn every available move for the piece to blue with red outline
+            if available_moves:
+                for possible_moves_tiles in available_moves:
+                    x_cord = possible_moves_tiles[0]
+                    y_cord = possible_moves_tiles[1]
 
-        # Highlight current Tile Selected
-        tile_selected = matrix_int[tileX][tileY]
-        color = canvas.itemcget(tile_selected, "fill")
-        changed_tiles.append((tile_selected, color))
-        canvas.itemconfig(tile_selected, width="5", outline="orange")
-
-        # Turn every available move for the piece to blue with red outline
-        if available_moves:
-            for possible_moves_tiles in available_moves:
-                x_cord = possible_moves_tiles[0]
-                y_cord = possible_moves_tiles[1]
-
-                if board.pieceAt(x_cord, y_cord) != currentPlayerColor:
-                    item = matrix_int[x_cord, y_cord]
-                    original_color = canvas.itemcget(item, "fill")
-                    # Store the tile and the color of the coordinate so it
-                    # can be reverted back later
-                    changed_tiles.append((item, original_color))
-                    canvas.itemconfig(item, fill = "blue", width = "5", outline = "red")
-    currentPieceSelected = current_piece
+                    if board.pieceAt(x_cord, y_cord) != currentPlayerColor:
+                        item = matrix_int[x_cord, y_cord]
+                        original_color = canvas.itemcget(item, "fill")
+                        # Store the tile and the color of the coordinate so it
+                        # can be reverted back later
+                        changed_tiles.append((item, original_color))
+                        canvas.itemconfig(item, fill = "blue", width = "5", outline = "red")
+        currentPieceSelected = current_piece
 
 
 canvas.bind('<Button-1>', buttonPressed)

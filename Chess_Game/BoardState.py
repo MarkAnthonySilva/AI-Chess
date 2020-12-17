@@ -2,6 +2,8 @@ import copy
 
 class BoardState:
     def __init__(self):
+        self.blackKing = None
+        self.whiteKing = None
         self.blackPieces = []
         self.whitePieces = []
 
@@ -56,6 +58,33 @@ class BoardState:
         else:
             return self.blackPieces
 
+    def inCheck(self, color):
+        if color == 'white':
+            king_location = [self.whiteKing.x, self.whiteKing.y]
+            for i in self.blackPieces:
+                if king_location in i.getAvailableMoves(self):
+                    return True
+        else:
+            king_location = [self.blackKing.x, self.blackKing.y]
+            for i in self.whitePieces:
+                if king_location in i.getAvailableMoves(self):
+                    return True
+        return False
+
+    def inCheckMate(self, color):
+        if color == 'white':
+            for i in self.whitePieces:
+                for j in i.getAvailableMoves(self):
+                    if not self.stateAfterMove(i.x, i.y, j[0], j[1]).inCheck('white'):
+                        return False
+        else:
+            for i in self.blackPieces:
+                for j in i.getAvailableMoves(self):
+                    if not self.stateAfterMove(i.x, i.y, j[0], j[1]).inCheck('black'):
+                        return False
+        return True
+
+
     #returns a copy of the BordState after the specified move has been made
     def stateAfterMove(self, xFrom, yFrom, xTo, yTo):
         newState = copy.deepcopy(self)
@@ -91,81 +120,34 @@ class BoardState:
         mobility_white = 0
         material_black = 0
         mobility_black = 0
+        check_black = 0
+        check_white = 0
+        mate_black = 0
+        mate_white = 0
+
+        if self.inCheck('white'):
+            check_white = 100000000
+        if self.inCheck('black'):
+            check_black = 100000000
+        if self.inCheckMate('white'):
+            check_white = 100000000
+        if self.inCheckMate('black'):
+            check_black = 100000000
 
         for piece in self.blackPieces:
             material_black = material_black + piece.value
             mobility_black = mobility_black + len(piece.getAvailableMoves(self)) * 10
-        black_evaluation = material_black + mobility_black
+
+        black_evaluation = material_black + mobility_black + check_white + mate_white
 
         for piece in self.whitePieces:
             material_white = material_white + piece.value
             mobility_white = mobility_white + len(piece.getAvailableMoves(self)) * 10
-        white_evaluation = material_white + mobility_white
+
+        white_evaluation = material_white + mobility_white + check_black + mate_black
 
         if color == 'black':
            evaluation = black_evaluation - white_evaluation
         else:
            evaluation = white_evaluation - black_evaluation
         return evaluation
-
-#    def createTree(self, color):
-#        root = StateTree(self)
-#        treeRecursion(color, 0, root)
-#        return root
-        
-                    
-
-#class StateTree:
-#    def __init__(self, state, parent = None):
-#        self.state = state
-#        self.parent = parent
-#        self.children = []
-#        self.eval = 0
-
-#def treeRecursion(color, depth, state):
-#    board = state.state
-#    if color == 'white':
-#        #iterate through all the pieces
-#        for i in board.whitePieces:
-#            #for each piece, get all the available moves
-#            possibleMoves = i.getAvailableMoves(board)
-#            #for every possible move, create a copy of the state, make the move, then append it to the parent state
-#            for j in possibleMoves:
-#                cp = copy.deepcopy(board)
-#                piece = cp.getPieceAt(i.x, i.y)
-#                #if there is already a piece there, remove it
-#                if cp.pieceAt(j[0],j[1]) == 'black':
-#                    for k in range(len(cp.blackPieces)):
-#                        if cp.blackPieces[k].x == j[0] and cp.blackPieces[k].y == j[1]:
-#                            cp.blackPieces.pop(k)
-#                            break
-#                piece.x = j[0]
-#                piece.y = j[1]
-#                piece.moved = True
-#                state.children.append(StateTree(cp,state))
-#    else:
-#        #iterate through all the pieces
-#        for i in board.blackPieces:
-#            #for each piece, get all the available moves
-#            possibleMoves = i.getAvailableMoves(board)
-#            #for every possible move, create a copy of the state, make the move, then append it to the parent state
-#            for j in possibleMoves:
-#                cp = copy.deepcopy(board)
-#                piece = cp.getPieceAt(i.x, i.y)
-#                #if there is already a piece there, remove it
-#                if cp.pieceAt(j[0],j[1]) == 'white':
-#                    #cp.whitePieces.remove(board.pieceAt(j[0],j[1]))
-#                    for k in range(len(cp.blackPieces)):
-#                        if cp.whitePieces[k].x == j[0] and cp.whitePieces[k].y == j[1]:
-#                            cp.whitePieces.pop(k)
-#                            break
-#                piece.x = j[0]
-#                piece.y = j[1]
-#                piece.moved = True
-#                state.children.append(StateTree(cp,state))
-#    if depth < MAX_DEPTH:
-#        for i in state.children:
-#            if color == 'black':
-#                treeRecursion('white', depth + 1, i)
-#            else:
-#                treeRecursion('black', depth + 1, i)

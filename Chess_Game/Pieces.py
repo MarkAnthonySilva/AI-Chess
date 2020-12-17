@@ -28,6 +28,7 @@ class Piece:
     def setPosition(self, X, Y):
         self.x = X
         self.y = Y
+        self.moved = True
 
     def getAvailableMoves(self):
         pass
@@ -42,10 +43,10 @@ class Pawn(Piece):
     white_abb = 'p'
 
     def __str__(self):
-        return '[PAWN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def __repr__(self):
-        return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[PAWN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -90,6 +91,12 @@ class Rook(Piece):
     value = 550
     black_abb = 'R'
     white_abb = 'r'
+
+    def __str__(self):
+        return '[ROOK,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
+
+    def __repr__(self):
+        return '[ROOK,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -161,9 +168,9 @@ class Knight(Piece):
     white_abb = 'n'
 
     def __str__(self):
-        return '[KNIGHT,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[KNIGHT,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
     def __repr__(self):
-        return '[KNIGHT,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[KNIGHT,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -205,9 +212,9 @@ class Bishop(Piece):
     white_abb = 'b'
     value = 350
     def __str__(self):
-        return '[BISHOP,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[BISHOP,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
     def __repr__(self):
-        return '[BISHOP,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[BISHOP,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -270,9 +277,9 @@ class Queen(Piece):
     white_abb = 'q'
 
     def __str__(self):
-        return '[QUEEN,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[QUEEN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
     def __repr__(self):
-        return '[QUEEN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[QUEEN,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
@@ -378,9 +385,9 @@ class King(Piece):
     white_abb = 'k'
 
     def __str__(self):
-        return '[KING,' + self.color + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[KING,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
     def __repr__(self):
-        return '[KING,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ']'
+        return '[KING,' + self.color + ',' + str(self.moved) + ',' + str(self.x) + ',' + str(self.y) + ',' + str(self.canvas_image) +']'
 
     def getAvailableMoves(self, board):
         toReturn = []
